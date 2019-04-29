@@ -7,6 +7,9 @@ namespace BaseOOPCompany
     {
         static void Main(string[] args)
         {
+            System.Diagnostics.Stopwatch swatch = new System.Diagnostics.Stopwatch();
+            swatch.Start();
+
             Manager manager1 = new Manager("Man1", "Manager1", 4000, 6);
             Manager manager2 = new Manager("Man2", "Manager2", 1500, 1);
             Manager manager3 = new Manager("Man3", "Manager3", 2500, 3);
@@ -59,6 +62,8 @@ namespace BaseOOPCompany
             Department department = new Department(new List<Manager> { manager1, manager2, manager3 });
 
             department.PaySalary();
+            swatch.Stop();
+            Console.WriteLine(swatch.Elapsed);
         }
     }
 }

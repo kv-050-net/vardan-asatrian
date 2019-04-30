@@ -7,8 +7,10 @@
 
   <ItemGroup>
     <Folder Include="Employees\" />
-    <Folder Include="SalaryCalculators\" />
-    <Folder Include="SalaryCalculatorFactories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaseOOPBLL\BaseOOPBLL.csproj" />
   </ItemGroup>
 
 </Project>

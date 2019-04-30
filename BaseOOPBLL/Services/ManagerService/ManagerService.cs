@@ -21,17 +21,25 @@ namespace BaseOOPBLL.Services.ManagerService
         {
             var manager = _mapper.Map<Manager>(man.Manager);
 
+            var department = _mapper.Map<Department>(man.Department);
+
             var developers = _mapper.Map<List<Developer>>(man.DevelopersTeam);
 
             var designers = _mapper.Map<List<Designer>>(man.DesignersTeam);
+
+            var managers = _mapper.Map<List<Manager>>(man.ManagersTeam);
 
             var newManager = _mapper.Map<Manager>(man);
 
             newManager.Manager = manager;
 
+            newManager.Department = department;
+
             newManager.DesignersTeam = designers;
 
             newManager.DevelopersTeam = developers;
+
+            newManager.ManagersTeam = managers;
 
             _db.Managers.Create(newManager);
 
@@ -71,13 +79,25 @@ namespace BaseOOPBLL.Services.ManagerService
             {
                 var manager = _mapper.Map<Manager>(man.Manager);
 
+                var department = _mapper.Map<Department>(man.Department);
+
                 var developers = _mapper.Map<List<Developer>>(man.DevelopersTeam);
 
                 var designers = _mapper.Map<List<Designer>>(man.DesignersTeam);
 
+                var managers = _mapper.Map<List<Manager>>(man.ManagersTeam);
+
                 newManager = _mapper.Map<Manager>(man);
 
                 newManager.Manager = manager;
+
+                newManager.Department = department;
+
+                newManager.DesignersTeam = designers;
+
+                newManager.DevelopersTeam = developers;
+
+                newManager.ManagersTeam = managers;
 
                 _db.Managers.Update(newManager);
 

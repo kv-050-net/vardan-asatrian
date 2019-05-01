@@ -7,7 +7,8 @@ namespace BaseOOPBLL.Services.DepartmentService
 {
     public interface IDepartmentService : IService<DepartmentDto>
     {
-        void PaySalary();
+        void PaySalary(DepartmentDto dep);
+        void PaySalaryParallel(DepartmentDto dep);
         void AccrueSalary(EmployeeDto employeeDto);
 
     }

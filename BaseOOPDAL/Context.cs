@@ -1,5 +1,6 @@
 ﻿using BaseOOPDAL.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace BaseOOPDAL
 {
@@ -9,6 +10,7 @@ namespace BaseOOPDAL
         public DbSet<Developer> Developers { get; set; }
         public DbSet<Designer> Designers { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -17,17 +19,9 @@ namespace BaseOOPDAL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Developer>()
+            builder.Entity<Employee>()
                 .HasOne(_ => _.Manager)
-                .WithMany(_ => _.DevelopersTeam)
-                .HasForeignKey(_ => _.ManagerId);
-            builder.Entity<Designer>()
-                .HasOne(_ => _.Manager)
-                .WithMany(_ => _.DesignersTeam)
-                .HasForeignKey(_ => _.ManagerId);
-            builder.Entity<Manager>()
-                .HasOne(_ => _.Manager)
-                .WithMany(_ => _.ManagersTeam)
+                .WithMany(_ => _.Team)
                 .HasForeignKey(_ => _.ManagerId);
             builder.Entity<Manager>()
                 .HasOne(_ => _.Department)

@@ -4,11 +4,11 @@ using System.Text;
 
 namespace BaseOOPCompany
 {
-    //public class ManagerSalaryCalculatorFactory : ISalaryCalculatorFactory
-    //{
-    //    public ISalaryCalculator CreateCalculator()
-    //    {
-    //        //return new SalaryCalculatorForManager();
-    //    }
-    //}
+    public class ManagerSalaryCalculatorFactory : ISalaryCalculatorFactory
+    {
+        public ISalaryCalculator CreateCalculator()
+        {
+            return new SalaryCalculatorForManager();
+        }
+    }
 }

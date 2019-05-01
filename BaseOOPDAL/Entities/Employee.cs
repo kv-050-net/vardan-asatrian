@@ -3,7 +3,7 @@
 namespace BaseOOPDAL.Entities
 {
     //[Table("NewName")]
-    [NotMapped]
+    //[NotMapped]
     public class Employee
     {
         //[Column(TypeName = "varchar(200)")]

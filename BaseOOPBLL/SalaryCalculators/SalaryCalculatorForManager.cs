@@ -6,50 +6,50 @@ using System.Text;
 
 namespace BaseOOPCompany
 {
-    //public class SalaryCalculatorForManager : SalaryCalculatorForEmployee
-    //{
-    //    public override decimal Calculate(EmployeeDto employeeDto)
-    //    {
-    //        var manager = employeeDto as ManagerDto;
+    public class SalaryCalculatorForManager : SalaryCalculatorForEmployee
+    {
+        public override decimal Calculate(EmployeeDto employeeDto)
+        {
+            var manager = employeeDto as ManagerDto;
 
-    //        decimal salary = GetSalaryByExperience(employeeDto);
+            decimal salary = GetSalaryByExperience(employeeDto);
 
-    //        if (manager.Team.Count > 10)
-    //        {
-    //            salary += 300;
-    //        }
+            if (manager.Team.Count > 10)
+            {
+                salary += 300;
+            }
 
-    //        else if (manager.Team.Count > 5)
-    //        {
-    //            salary += 200;
-    //        }
+            else if (manager.Team.Count > 5)
+            {
+                salary += 200;
+            }
 
-    //        if (IsDevelopersMoreThanTeamHalf(manager))
-    //        {
-    //            salary *= 1.1m;
-    //        }
+            if (IsDevelopersMoreThanTeamHalf(manager))
+            {
+                salary *= 1.1m;
+            }
 
-    //        return salary;
-    //    }
+            return salary;
+        }
 
-    //    private bool IsDevelopersMoreThanTeamHalf(Manager manager)
-    //    {
-    //        int developersCount = 0;
+        private bool IsDevelopersMoreThanTeamHalf(ManagerDto manager)
+        {
+            int developersCount = 0;
 
-    //        foreach (var employee in manager.Team)
-    //        {
-    //            if (employee is Developer)
-    //                developersCount++;
-    //        }
+            foreach (var employee in manager.Team)
+            {
+                if (employee is DeveloperDto)
+                    developersCount++;
+            }
 
-    //        if (developersCount > manager.Team.Count / 2)
-    //        {
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
-    //}
+            if (developersCount > manager.Team.Count / 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 }

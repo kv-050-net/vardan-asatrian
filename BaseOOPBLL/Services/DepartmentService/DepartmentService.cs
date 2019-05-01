@@ -1,6 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using BaseOOPBLL.Entities;
+using BaseOOPCompany;
+using BaseOOPDAL;
 using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 
@@ -8,20 +13,26 @@ namespace BaseOOPBLL.Services.DepartmentService
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _db;
+        private readonly IDictionary<Type, ISalaryCalculator> _calculatorsDictionary;
+        private ISalaryCalculator _salaryCalculator;
 
-        public DepartmentService(IMapper mapper, IUnitOfWork db)
+        public DepartmentService()
         {
-            _mapper = mapper;
-            _db = db;
+            _db = new UnitOfWork();
+            _calculatorsDictionary = new Dictionary<Type, ISalaryCalculator>
+            {
+                [typeof(DeveloperDto)] = new DeveloperSalaryCalculatorFactory().CreateCalculator(),
+                [typeof(DesignerDto)] = new DesignerSalaryCalculatorFactory().CreateCalculator(),
+                [typeof(ManagerDto)] = new ManagerSalaryCalculatorFactory().CreateCalculator()
+            };
         }
 
         public void Create(DepartmentDto dep)
         {
-            var managers = _mapper.Map<List<Manager>>(dep.Managers);
+            var managers = Mapper.Map<List<Manager>>(dep.Managers);
 
-            var department = _mapper.Map<Department>(dep);
+            var department = Mapper.Map<Department>(dep);
 
             department.Managers = managers;
 
@@ -43,7 +54,7 @@ namespace BaseOOPBLL.Services.DepartmentService
 
             _db.Save();
 
-            return _mapper.Map<DepartmentDto>(department);
+            return Mapper.Map<DepartmentDto>(department);
         }
 
         public IEnumerable<DepartmentDto> ReadAll()
@@ -52,7 +63,7 @@ namespace BaseOOPBLL.Services.DepartmentService
 
             _db.Save();
 
-            return _mapper.Map<IEnumerable<DepartmentDto>>(department);
+            return Mapper.Map<IEnumerable<DepartmentDto>>(department);
         }
 
         public void Update(DepartmentDto dep)
@@ -61,9 +72,9 @@ namespace BaseOOPBLL.Services.DepartmentService
 
             if (department != null)
             {
-                var managers = _mapper.Map<List<Manager>>(dep.Managers);
+                var managers = Mapper.Map<List<Manager>>(dep.Managers);
 
-                department = _mapper.Map<Department>(dep);
+                department = Mapper.Map<Department>(dep);
 
                 department.Managers = managers;
 
@@ -78,14 +89,37 @@ namespace BaseOOPBLL.Services.DepartmentService
             _db.Dispose();
         }
 
-        public void PaySalary()
+        public void PaySalary(DepartmentDto dep)
         {
-            throw new System.NotImplementedException();
+            foreach (var manager in dep.Managers)
+            {
+                AccrueSalary(manager);
+
+                foreach (var teamMember in manager.Team)
+                {
+                    AccrueSalary(teamMember);
+                }
+            }
+        }
+
+        public void PaySalaryParallel(DepartmentDto dep)
+        {
+            Parallel.ForEach(dep.Managers, (manager) =>
+            {
+                AccrueSalary(manager);
+
+                Parallel.ForEach(manager.Team, (teamMember) =>
+                {
+                    AccrueSalary(teamMember);
+                });
+            });
         }
 
         public void AccrueSalary(EmployeeDto employeeDto)
         {
-            throw new System.NotImplementedException();
+            _salaryCalculator = _calculatorsDictionary[employeeDto.GetType()];
+
+            Console.WriteLine($"{employeeDto.FirstName} {employeeDto.SecondName}: got salary: {_salaryCalculator.Calculate(employeeDto).ToString("0.00")}. Thread - {Thread.CurrentThread.ManagedThreadId}");
         }
     }
 }

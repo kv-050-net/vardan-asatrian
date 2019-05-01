@@ -7,6 +7,7 @@ namespace BaseOOPDAL
     public class UnitOfWork : IUnitOfWork
     {
         private Context _context { get; }
+        private IRepository<Employee> _employee;
         private IRepository<Developer> _developer;
         private IRepository<Designer> _designer;
         private IRepository<Manager> _manager;
@@ -15,6 +16,16 @@ namespace BaseOOPDAL
         public UnitOfWork()
         {
             _context = new Context();
+        }
+
+        public IRepository<Employee> Employees
+        {
+            get
+            {
+                if (_employee == null)
+                    _employee = new EmployeeRepository(_context);
+                return _employee;
+            }
         }
 
         public IRepository<Developer> Developers

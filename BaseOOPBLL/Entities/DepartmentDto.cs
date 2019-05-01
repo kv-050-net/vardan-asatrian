@@ -7,6 +7,6 @@ namespace BaseOOPBLL.Entities
     {
         public int Id { get; set; }
 
-        public List<Manager> Managers { get; set; }
+        public List<ManagerDto> Managers { get; set; }
     }
 }

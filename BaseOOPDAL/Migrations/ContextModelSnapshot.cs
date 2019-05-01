@@ -30,13 +30,14 @@ namespace BaseOOPDAL.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("BaseOOPDAL.Entities.Designer", b =>
+            modelBuilder.Entity("BaseOOPDAL.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("EffectivenessCoefficient");
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
 
                     b.Property<int>("Experience");
 
@@ -52,70 +53,42 @@ namespace BaseOOPDAL.Migrations
 
                     b.HasIndex("ManagerId");
 
-                    b.ToTable("Designers");
+                    b.ToTable("Employees");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Employee");
+                });
+
+            modelBuilder.Entity("BaseOOPDAL.Entities.Designer", b =>
+                {
+                    b.HasBaseType("BaseOOPDAL.Entities.Employee");
+
+                    b.Property<decimal>("EffectivenessCoefficient");
+
+                    b.HasDiscriminator().HasValue("Designer");
                 });
 
             modelBuilder.Entity("BaseOOPDAL.Entities.Developer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("BaseOOPDAL.Entities.Employee");
 
-                    b.Property<int>("Experience");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<int?>("ManagerId");
-
-                    b.Property<decimal>("Salary");
-
-                    b.Property<string>("SecondName");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ManagerId");
-
-                    b.ToTable("Developers");
+                    b.HasDiscriminator().HasValue("Developer");
                 });
 
             modelBuilder.Entity("BaseOOPDAL.Entities.Manager", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasBaseType("BaseOOPDAL.Entities.Employee");
 
                     b.Property<int?>("DepartmentId");
 
-                    b.Property<int>("Experience");
-
-                    b.Property<string>("FirstName");
-
-                    b.Property<int?>("ManagerId");
-
-                    b.Property<decimal>("Salary");
-
-                    b.Property<string>("SecondName");
-
-                    b.HasKey("Id");
-
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("ManagerId");
-
-                    b.ToTable("Managers");
+                    b.HasDiscriminator().HasValue("Manager");
                 });
 
-            modelBuilder.Entity("BaseOOPDAL.Entities.Designer", b =>
+            modelBuilder.Entity("BaseOOPDAL.Entities.Employee", b =>
                 {
                     b.HasOne("BaseOOPDAL.Entities.Manager", "Manager")
-                        .WithMany("DesignersTeam")
-                        .HasForeignKey("ManagerId");
-                });
-
-            modelBuilder.Entity("BaseOOPDAL.Entities.Developer", b =>
-                {
-                    b.HasOne("BaseOOPDAL.Entities.Manager", "Manager")
-                        .WithMany("DevelopersTeam")
+                        .WithMany("Team")
                         .HasForeignKey("ManagerId");
                 });
 
@@ -124,10 +97,6 @@ namespace BaseOOPDAL.Migrations
                     b.HasOne("BaseOOPDAL.Entities.Department", "Department")
                         .WithMany("Managers")
                         .HasForeignKey("DepartmentId");
-
-                    b.HasOne("BaseOOPDAL.Entities.Manager", "Manager")
-                        .WithMany("ManagersTeam")
-                        .HasForeignKey("ManagerId");
                 });
 #pragma warning restore 612, 618
         }

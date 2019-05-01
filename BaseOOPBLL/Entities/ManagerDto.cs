@@ -7,10 +7,12 @@ namespace BaseOOPBLL.Entities
         public int? DepartmentId { get; set; }
         public DepartmentDto Department { get; set; }
 
-        public List<DeveloperDto> DevelopersTeam { get; set; }
+        public List<EmployeeDto> Team { get; set; }
 
-        public List<DesignerDto> DesignersTeam { get; set; }
+        //public List<DeveloperDto> DevelopersTeam { get; set; }
 
-        public List<ManagerDto> ManagersTeam { get; set; }
+        //public List<DesignerDto> DesignersTeam { get; set; }
+
+        //public List<ManagerDto> ManagersTeam { get; set; }
     }
 }

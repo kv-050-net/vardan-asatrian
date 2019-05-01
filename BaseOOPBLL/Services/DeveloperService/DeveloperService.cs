@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using BaseOOPBLL.Entities;
+using BaseOOPDAL;
 using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 
@@ -8,20 +9,18 @@ namespace BaseOOPBLL.Services.DeveloperService
 {
     public class DeveloperService : IDeveloperService
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _db;
 
-        public DeveloperService(IMapper mapper, IUnitOfWork db)
+        public DeveloperService()
         {
-            _mapper = mapper;
-            _db = db;
+            _db = new UnitOfWork();
         }
 
         public void Create(DeveloperDto dev)
         {
-            var manager = _mapper.Map<Manager>(dev.Manager);
+            var manager = Mapper.Map<Manager>(dev.Manager);
 
-            var developer = _mapper.Map<Developer>(dev);
+            var developer = Mapper.Map<Developer>(dev);
 
             developer.Manager = manager;
 
@@ -43,7 +42,7 @@ namespace BaseOOPBLL.Services.DeveloperService
 
             _db.Save();
 
-            return _mapper.Map<DeveloperDto>(developer);
+            return Mapper.Map<DeveloperDto>(developer);
         }
 
         public IEnumerable<DeveloperDto> ReadAll()
@@ -52,7 +51,7 @@ namespace BaseOOPBLL.Services.DeveloperService
 
             _db.Save();
 
-            return _mapper.Map<IEnumerable<DeveloperDto>>(developers);
+            return Mapper.Map<IEnumerable<DeveloperDto>>(developers);
         }
 
         public void Update(DeveloperDto dev)
@@ -61,9 +60,9 @@ namespace BaseOOPBLL.Services.DeveloperService
 
             if (developer != null)
             {
-                var manager = _mapper.Map<Manager>(dev.Manager);
+                var manager = Mapper.Map<Manager>(dev.Manager);
 
-                developer = _mapper.Map<Developer>(dev);
+                developer = Mapper.Map<Developer>(dev);
 
                 developer.Manager = manager;
 

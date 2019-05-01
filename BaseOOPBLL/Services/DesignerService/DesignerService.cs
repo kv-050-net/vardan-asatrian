@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using BaseOOPBLL.Entities;
+using BaseOOPDAL;
 using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 
@@ -8,21 +9,19 @@ namespace BaseOOPBLL.Services.DestignerService
 {
     public class DesignerService : IDesignerService
     {
-        private readonly IMapper _mapper;
         private readonly IUnitOfWork _db;
 
-        public DesignerService(IMapper mapper, IUnitOfWork db)
+        public DesignerService()
         {
-            _mapper = mapper;
-            _db = db;
+            _db = new UnitOfWork();
 
         }
 
         public void Create(DesignerDto des)
         {
-            var manager = _mapper.Map<Manager>(des.Manager);
+            var manager = Mapper.Map<Manager>(des.Manager);
 
-            var designer = _mapper.Map<Designer>(des);
+            var designer = Mapper.Map<Designer>(des);
 
             designer.Manager = manager;
 
@@ -44,7 +43,7 @@ namespace BaseOOPBLL.Services.DestignerService
 
             _db.Save();
 
-            return _mapper.Map<DesignerDto>(designer);
+            return Mapper.Map<DesignerDto>(designer);
         }
 
         public IEnumerable<DesignerDto> ReadAll()
@@ -53,7 +52,7 @@ namespace BaseOOPBLL.Services.DestignerService
 
             _db.Save();
 
-            return _mapper.Map<IEnumerable<DesignerDto>>(designers);
+            return Mapper.Map<IEnumerable<DesignerDto>>(designers);
         }
 
         public void Update(DesignerDto des)
@@ -62,9 +61,9 @@ namespace BaseOOPBLL.Services.DestignerService
 
             if (designer != null)
             {
-                var manager = _mapper.Map<Manager>(des.Manager);
+                var manager = Mapper.Map<Manager>(des.Manager);
 
-                designer = _mapper.Map<Designer>(des);
+                designer = Mapper.Map<Designer>(des);
 
                 designer.Manager = manager;
 

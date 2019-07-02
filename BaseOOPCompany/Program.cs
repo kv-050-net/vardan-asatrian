@@ -60,36 +60,37 @@ namespace BaseOOPCompany
 
             var department1 = new DepartmentDto { Managers = new List<ManagerDto> { manager1, manager2, manager3 } };
 
-            //startup.developerService.Create(developer1);
-            //startup.developerService.Create(developer2);
-            //startup.developerService.Create(developer3);
-            //startup.developerService.Create(developer4);
-            //startup.developerService.Create(developer5);
-            //startup.developerService.Create(developer6);
-            //startup.developerService.Create(developer7);
-            //startup.developerService.Create(developer8);
-            //startup.developerService.Create(developer9);
-            //startup.developerService.Create(developer10);
-            //startup.developerService.Create(developer11);
-            //startup.developerService.Create(developer12);
-            //startup.developerService.Create(developer13);
-            //startup.developerService.Create(developer14);
-            //startup.developerService.Create(developer15);
-            //startup.designerService.Create(designer1);
-            //startup.designerService.Create(designer2);
-            //startup.designerService.Create(designer3);
-            //startup.designerService.Create(designer4);
-            //startup.designerService.Create(designer5);
-            //startup.designerService.Create(designer6);
-            //startup.designerService.Create(designer7);
-            //startup.designerService.Create(designer8);
-            //startup.designerService.Create(designer9);
-            //startup.managerService.Create(manager1);
-            //startup.managerService.Create(manager2);
-            //startup.managerService.Create(manager3);
-            //startup.departmentService.Create(department1);
+            //startup.developerService.CreateOrUpdateAsync(developer1);
+            //startup.developerService.CreateOrUpdateAsync(developer2);
+            //startup.developerService.CreateOrUpdateAsync(developer3);
+            //startup.developerService.CreateOrUpdateAsync(developer4);
+            //startup.developerService.CreateOrUpdateAsync(developer5);
+            //startup.developerService.CreateOrUpdateAsync(developer6);
+            //startup.developerService.CreateOrUpdateAsync(developer7);
+            //startup.developerService.CreateOrUpdateAsync(developer8);
+            //startup.developerService.CreateOrUpdateAsync(developer9);
+            //startup.developerService.CreateOrUpdateAsync(developer10);
+            //startup.developerService.CreateOrUpdateAsync(developer11);
+            //startup.developerService.CreateOrUpdateAsync(developer12);
+            //startup.developerService.CreateOrUpdateAsync(developer13);
+            //startup.developerService.CreateOrUpdateAsync(developer14);
+            //startup.developerService.CreateOrUpdateAsync(developer15);
+            //startup.designerService.CreateOrUpdateAsync(designer1);
+            //startup.designerService.CreateOrUpdateAsync(designer2);
+            //startup.designerService.CreateOrUpdateAsync(designer3);
+            //startup.designerService.CreateOrUpdateAsync(designer4);
+            //startup.designerService.CreateOrUpdateAsync(designer5);
+            //startup.designerService.CreateOrUpdateAsync(designer6);
+            //startup.designerService.CreateOrUpdateAsync(designer7);
+            //startup.designerService.CreateOrUpdateAsync(designer8);
+            //startup.designerService.CreateOrUpdateAsync(designer9);
+            //startup.managerService.CreateOrUpdateAsync(manager1);
+            //startup.managerService.CreateOrUpdateAsync(manager2);
+            //startup.managerService.CreateOrUpdateAsync(manager3);
+            //startup.departmentService.CreateOrUpdateAsync(department1);
 
-            startup.departmentService.PaySalary(department1);
+            //startup.departmentService.PaySalary(department1);
+            startup.departmentService.PaySalaryParallel(department1);
 
             Console.ReadKey();
         }

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using BaseOOPBLL.Entities;
-using BaseOOPDAL;
 using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 
@@ -9,73 +8,21 @@ namespace BaseOOPBLL.Services.DestignerService
 {
     public class DesignerService : IDesignerService
     {
-        private readonly IUnitOfWork _db;
+        private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public DesignerService()
+        public DesignerService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _db = new UnitOfWork();
-
+            _uow = unitOfWork;
+            _mapper = mapper;
         }
 
-        public void Create(DesignerDto des)
+        public async Task CreateOrUpdateAsync (DesignerDto designerDto)
         {
-            var manager = Mapper.Map<Manager>(des.Manager);
+            var designer = _mapper.Map<Designer>(designerDto);
 
-            var designer = Mapper.Map<Designer>(des);
-
-            designer.Manager = manager;
-
-            _db.Designers.Create(designer);
-
-            _db.Save();
-        }
-
-        public void Delete(int id)
-        {
-            _db.Designers.Delete(id);
-
-            _db.Save();
-        }
-
-        public DesignerDto Read(int id)
-        {
-            var designer = _db.Designers.Read(id);
-
-            _db.Save();
-
-            return Mapper.Map<DesignerDto>(designer);
-        }
-
-        public IEnumerable<DesignerDto> ReadAll()
-        {
-            var designers = _db.Designers.ReadAll();
-
-            _db.Save();
-
-            return Mapper.Map<IEnumerable<DesignerDto>>(designers);
-        }
-
-        public void Update(DesignerDto des)
-        {
-            var designer = _db.Designers.Read(des.Id);
-
-            if (designer != null)
-            {
-                var manager = Mapper.Map<Manager>(des.Manager);
-
-                designer = Mapper.Map<Designer>(des);
-
-                designer.Manager = manager;
-
-                _db.Designers.Update(designer);
-
-                _db.Save();
-            }
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
+            await _uow.Designers.CreateOrUpdateAsync(designer);
+            await _uow.CommitAsync();
         }
     }
 }

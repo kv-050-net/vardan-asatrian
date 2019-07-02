@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using BaseOOPBLL.Entities;
-using BaseOOPDAL;
 using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 
@@ -9,72 +8,21 @@ namespace BaseOOPBLL.Services.DeveloperService
 {
     public class DeveloperService : IDeveloperService
     {
-        private readonly IUnitOfWork _db;
+        private readonly IUnitOfWork _uow;
+        private readonly IMapper _mapper;
 
-        public DeveloperService()
+        public DeveloperService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _db = new UnitOfWork();
+            _uow = unitOfWork;
+            _mapper = mapper;
         }
 
-        public void Create(DeveloperDto dev)
+        public async Task CreateOrUpdateAsync(DeveloperDto developerDto)
         {
-            var manager = Mapper.Map<Manager>(dev.Manager);
+            var developer = _mapper.Map<Developer>(developerDto);
 
-            var developer = Mapper.Map<Developer>(dev);
-
-            developer.Manager = manager;
-
-            _db.Developers.Create(developer);
-
-            _db.Save();
-        }
-
-        public void Delete(int id)
-        {
-            _db.Developers.Delete(id);
-
-            _db.Save();
-        }
-
-        public DeveloperDto Read(int id)
-        {
-            var developer = _db.Developers.Read(id);
-
-            _db.Save();
-
-            return Mapper.Map<DeveloperDto>(developer);
-        }
-
-        public IEnumerable<DeveloperDto> ReadAll()
-        {
-            var developers = _db.Developers.ReadAll();
-
-            _db.Save();
-
-            return Mapper.Map<IEnumerable<DeveloperDto>>(developers);
-        }
-
-        public void Update(DeveloperDto dev)
-        {
-            var developer = _db.Developers.Read(dev.Id);
-
-            if (developer != null)
-            {
-                var manager = Mapper.Map<Manager>(dev.Manager);
-
-                developer = Mapper.Map<Developer>(dev);
-
-                developer.Manager = manager;
-
-                _db.Developers.Update(developer);
-
-                _db.Save();
-            }
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
+            await _uow.Developers.CreateOrUpdateAsync(developer);
+            await _uow.CommitAsync();
         }
     }
 }

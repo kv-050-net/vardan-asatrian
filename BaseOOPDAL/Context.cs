@@ -1,6 +1,5 @@
 ﻿using BaseOOPDAL.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace BaseOOPDAL
 {
@@ -12,9 +11,9 @@ namespace BaseOOPDAL
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localDb)\mssqllocaldb;Database=BaseOOPDB;Trusted_Connection=True;");
+            options.UseSqlServer(@"Server=(localDb)\mssqllocaldb;Database=BaseOOPDB;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -13,13 +13,15 @@ namespace BaseOOPBLL.Services.DepartmentService
 {
     public class DepartmentService : IDepartmentService
     {
-        private readonly IUnitOfWork _db;
+        private readonly IUnitOfWork _uow;
         private readonly IDictionary<Type, ISalaryCalculator> _calculatorsDictionary;
         private ISalaryCalculator _salaryCalculator;
+        private readonly IMapper _mapper;
 
-        public DepartmentService()
+        public DepartmentService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _db = new UnitOfWork();
+            _uow = unitOfWork;
+            _mapper = mapper;
             _calculatorsDictionary = new Dictionary<Type, ISalaryCalculator>
             {
                 [typeof(DeveloperDto)] = new DeveloperSalaryCalculatorFactory().CreateCalculator(),
@@ -28,65 +30,12 @@ namespace BaseOOPBLL.Services.DepartmentService
             };
         }
 
-        public void Create(DepartmentDto dep)
+        public async Task CreateOrUpdateAsync(DepartmentDto departmentDto)
         {
-            var managers = Mapper.Map<List<Manager>>(dep.Managers);
+            var department = _mapper.Map<Department>(departmentDto);
 
-            var department = Mapper.Map<Department>(dep);
-
-            department.Managers = managers;
-
-            _db.Departments.Create(department);
-
-            _db.Save();
-        }
-
-        public void Delete(int id)
-        {
-            _db.Departments.Delete(id);
-
-            _db.Save();
-        }
-
-        public DepartmentDto Read(int id)
-        {
-            var department = _db.Departments.Read(id);
-
-            _db.Save();
-
-            return Mapper.Map<DepartmentDto>(department);
-        }
-
-        public IEnumerable<DepartmentDto> ReadAll()
-        {
-            var department = _db.Departments.ReadAll();
-
-            _db.Save();
-
-            return Mapper.Map<IEnumerable<DepartmentDto>>(department);
-        }
-
-        public void Update(DepartmentDto dep)
-        {
-            var department = _db.Departments.Read(dep.Id);
-
-            if (department != null)
-            {
-                var managers = Mapper.Map<List<Manager>>(dep.Managers);
-
-                department = Mapper.Map<Department>(dep);
-
-                department.Managers = managers;
-
-                _db.Departments.Update(department);
-
-                _db.Save();
-            }
-        }
-
-        public void Dispose()
-        {
-            _db.Dispose();
+            await _uow.Departments.CreateOrUpdateAsync(department);
+            await _uow.CommitAsync();
         }
 
         public void PaySalary(DepartmentDto dep)

@@ -1,6 +1,8 @@
 ﻿using BaseOOPDAL.Entities;
 using BaseOOPDAL.Interfaces;
 using BaseOOPDAL.Repositories;
+using System;
+using System.Threading.Tasks;
 
 namespace BaseOOPDAL
 {
@@ -12,10 +14,11 @@ namespace BaseOOPDAL
         private IRepository<Designer> _designer;
         private IRepository<Manager> _manager;
         private IRepository<Department> _department;
+        private bool _disposed = false;
 
-        public UnitOfWork()
+        public UnitOfWork(Context context)
         {
-            _context = new Context();
+            _context = context;
         }
 
         public IRepository<Employee> Employees
@@ -23,7 +26,7 @@ namespace BaseOOPDAL
             get
             {
                 if (_employee == null)
-                    _employee = new EmployeeRepository(_context);
+                    _employee = new RepositoryBase<Employee>(_context);
                 return _employee;
             }
         }
@@ -33,7 +36,7 @@ namespace BaseOOPDAL
             get
             {
                 if (_developer == null)
-                    _developer = new DeveloperRepository(_context);
+                    _developer = new RepositoryBase<Developer>(_context);
                 return _developer;
             }
         }
@@ -43,7 +46,7 @@ namespace BaseOOPDAL
             get
             {
                 if (_designer == null)
-                    _designer = new DesignerRepository(_context);
+                    _designer = new RepositoryBase<Designer>(_context);
                 return _designer;
             }
         }
@@ -53,7 +56,7 @@ namespace BaseOOPDAL
             get
             {
                 if (_manager == null)
-                    _manager = new ManagerRepository(_context);
+                    _manager = new RepositoryBase<Manager>(_context);
                 return _manager;
             }
         }
@@ -63,19 +66,37 @@ namespace BaseOOPDAL
             get
             {
                 if (_department == null)
-                    _department = new DepartmentRepository(_context);
+                    _department = new RepositoryBase<Department>(_context);
                 return _department;
             }
         }
 
-        public void Save()
+        public void Commit()
         {
             _context.SaveChanges();
         }
 
+        public async Task CommitAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            _disposed = true;
+        }
+
         public void Dispose()
         {
-            _context.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

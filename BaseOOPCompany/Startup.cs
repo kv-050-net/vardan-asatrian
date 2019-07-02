@@ -5,9 +5,9 @@ using BaseOOPBLL.Services.DestignerService;
 using BaseOOPBLL.Services.DeveloperService;
 using BaseOOPBLL.Services.EmployeeService;
 using BaseOOPBLL.Services.ManagerService;
-using Microsoft.EntityFrameworkCore;
+using BaseOOPDAL;
+using BaseOOPDAL.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-
 namespace BaseOOPCompany
 {
     public class Startup
@@ -24,10 +24,10 @@ namespace BaseOOPCompany
 
         public Startup()
         {
-            services.AddDbContext<DbContext>(options =>
-            {
-                options.UseSqlServer(@"Server=(localDb)\mssqllocaldb;Database=BaseOOPDB;Trusted_Connection=True;");
-            });
+            services.AddDbContext<Context>();
+
+            services.AddAutoMapper();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDepartmentService, DepartmentService>();
             services.AddScoped<IDesignerService, DesignerService>();
             services.AddScoped<IDeveloperService, DeveloperService>();

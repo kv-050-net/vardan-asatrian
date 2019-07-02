@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using BaseOOPDAL.Entities;
 
 namespace BaseOOPDAL.Interfaces
@@ -10,6 +11,7 @@ namespace BaseOOPDAL.Interfaces
         IRepository<Designer> Designers { get; }
         IRepository<Manager> Managers { get; }
         IRepository<Department> Departments { get; }
-        void Save();
+        void Commit();
+        Task CommitAsync();
     }
 }
